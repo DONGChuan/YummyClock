@@ -34,6 +34,7 @@ public class TimeView extends LinearLayout{
         super.onFinishInflate();
 
         tvTime = (TextView) findViewById(R.id.tv_Time);
+        timerHandler.sendEmptyMessage(0);
     }
 
     @Override
@@ -46,7 +47,7 @@ public class TimeView extends LinearLayout{
         }
     }
 
-    private void refreshtime() {
+    private void refreshTime() {
         Calendar c = Calendar.getInstance();
         tvTime.setText(String.format("%d:%d:%d",
                 c.get(Calendar.HOUR_OF_DAY),
@@ -54,14 +55,13 @@ public class TimeView extends LinearLayout{
                 c.get(Calendar.SECOND)));
     }
 
-    private Handler timerHandler = new Handler() {
-        @Override
+    private Handler timerHandler = new Handler(){
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            refreshtime();
-            if(getVisibility() == View.VISIBLE) {
-                timerHandler.sendEmptyMessageAtTime(0, 1000);
+            refreshTime();
+
+            if (getVisibility()==View.VISIBLE) {
+                timerHandler.sendEmptyMessageDelayed(0, 1000);
             }
         }
-    }
+    };
 }
