@@ -12,11 +12,11 @@ import android.os.Handler;
 import java.util.Calendar;
 
 /**
+ * A Clock View to show current time
  * Created by Chuan on 7/4/2015.
  */
 public class TimeView extends LinearLayout{
 
-    private TextView tvTime;
     public TimeView(Context context) {
         super(context);
     }
@@ -29,6 +29,19 @@ public class TimeView extends LinearLayout{
         super(context, attrs, defStyleAttr);
     }
 
+    private TextView tvTime; // TextView to show current time
+
+    private Handler timerHandler = new Handler(){
+        public void handleMessage(Message msg) {
+            refreshTime();
+            // If still in this tab
+            if (getVisibility() == View.VISIBLE) {
+                // By this way, refreshTime will be ran every second
+                timerHandler.sendEmptyMessageDelayed(0, 1000);
+            }
+        }
+    };
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -37,31 +50,30 @@ public class TimeView extends LinearLayout{
         timerHandler.sendEmptyMessage(0);
     }
 
+    /**
+     * If switch to other tab, handler will remove the messages
+     * @param changedView
+     * @param visibility
+     */
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
         if(getVisibility() == View.VISIBLE) {
             timerHandler.sendEmptyMessage(0);
-        } else {
+        } else { // If View.GONE, so view not visible. Remove message
             timerHandler.removeMessages(0);
         }
     }
 
+    /**
+     * Refresh time shown on TextView
+     */
     private void refreshTime() {
         Calendar c = Calendar.getInstance();
+        // Set current time on TextView tvTime
         tvTime.setText(String.format("%d:%d:%d",
                 c.get(Calendar.HOUR_OF_DAY),
                 c.get(Calendar.MINUTE),
                 c.get(Calendar.SECOND)));
     }
-
-    private Handler timerHandler = new Handler(){
-        public void handleMessage(Message msg) {
-            refreshTime();
-
-            if (getVisibility()==View.VISIBLE) {
-                timerHandler.sendEmptyMessageDelayed(0, 1000);
-            }
-        }
-    };
 }
