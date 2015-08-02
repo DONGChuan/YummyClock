@@ -17,10 +17,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlayAlarmAty"
+            android:name=".alarm.service.PlayAlarmAty"
             android:screenOrientation="portrait">
         </activity>
-        <receiver android:name="AlarmReceiver"></receiver>
+        <receiver android:name=".alarm.service.AlarmReceiver"></receiver>
     </application>
 
 </manifest>

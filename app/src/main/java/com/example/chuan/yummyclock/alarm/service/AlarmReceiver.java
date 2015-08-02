@@ -1,4 +1,4 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.alarm.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -13,7 +13,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("Alarm is running");
 
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.cancel(PendingIntent.getBroadcast(context, getResultCode(), new Intent(context, AlarmReceiver.class), 0));

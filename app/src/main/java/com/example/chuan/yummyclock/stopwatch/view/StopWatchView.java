@@ -1,4 +1,4 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.stopwatch.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.os.Handler;
 import android.os.Message;
+
+import com.example.chuan.yummyclock.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

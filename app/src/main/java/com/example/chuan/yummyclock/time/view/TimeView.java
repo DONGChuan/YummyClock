@@ -1,4 +1,4 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.time.view;
 
 import android.content.Context;
 import android.os.Message;
@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import android.os.Handler;
+
+import com.example.chuan.yummyclock.R;
 
 import java.util.Calendar;
 

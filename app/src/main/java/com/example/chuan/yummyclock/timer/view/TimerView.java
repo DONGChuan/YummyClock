@@ -1,4 +1,4 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.timer.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.os.Handler;
 
+import com.example.chuan.yummyclock.R;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,6 +23,7 @@ import java.util.TimerTask;
  */
 public class TimerView extends LinearLayout {
 
+    /*********** Variables ***********/
     private Timer timer = new Timer();
     private TimerTask timerTask = null;
     private Button btnStart, btnPause, btnResume, btnReset;
@@ -29,6 +32,7 @@ public class TimerView extends LinearLayout {
     private static final int MSG_WHAT_TIME_IS_UP = 1;
     private static final int MSG_WHAT_TIME_TICK = 2;
 
+    /*********** Constructors ***********/
     public TimerView(Context context) {
         super(context);
     }
@@ -37,7 +41,7 @@ public class TimerView extends LinearLayout {
         super(context, attrs);
     }
 
-
+    /*********** Functions ***********/
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -52,10 +56,12 @@ public class TimerView extends LinearLayout {
         etSec = (EditText) findViewById(R.id.etSecond);
 
         etHour.setText("00");
+        etMin.setText("00");
+        etSec.setText("00");
+
         etHour.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -66,22 +72,18 @@ public class TimerView extends LinearLayout {
                     if (value > 59) {
                         etHour.setText("59");
                     } else if (value < 0) {
-                        etHour.setText("0");
+                        etHour.setText("00");
                     }
                 }
                 checkToEnableBtnStart();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
-        etMin.setText("00");
         etMin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -92,23 +94,18 @@ public class TimerView extends LinearLayout {
                     if (value > 59) {
                         etMin.setText("59");
                     } else if (value < 0) {
-                        etMin.setText("0");
+                        etMin.setText("00");
                     }
                 }
                 checkToEnableBtnStart();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
-        etSec.setText("00");
         etSec.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int count, int after) {
@@ -118,17 +115,16 @@ public class TimerView extends LinearLayout {
                     if (value > 59) {
                         etSec.setText("59");
                     } else if (value < 0) {
-                        etSec.setText("0");
+                        etSec.setText("00");
                     }
                 }
                 checkToEnableBtnStart();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
+
         btnStart.setVisibility(View.VISIBLE);
         btnStart.setEnabled(false);
         btnPause.setVisibility(View.GONE);
@@ -138,9 +134,7 @@ public class TimerView extends LinearLayout {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startTimer();
-
                 btnStart.setVisibility(View.GONE);
                 btnPause.setVisibility(View.VISIBLE);
                 btnResume.setVisibility(View.VISIBLE);
@@ -149,9 +143,7 @@ public class TimerView extends LinearLayout {
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 stopTimer();
-
                 btnPause.setVisibility(View.GONE);
                 btnReset.setVisibility(View.VISIBLE);
                 btnResume.setVisibility(View.VISIBLE);
@@ -160,9 +152,7 @@ public class TimerView extends LinearLayout {
         btnResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startTimer();
-
                 btnPause.setVisibility(View.VISIBLE);
                 btnReset.setVisibility(View.VISIBLE);
                 btnResume.setVisibility(View.GONE);
@@ -172,10 +162,9 @@ public class TimerView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 stopTimer();
-
-                etHour.setText("0");
-                etMin.setText("0");
-                etSec.setText("0");
+                etHour.setText("00");
+                etMin.setText("00");
+                etSec.setText("00");
 
                 btnResume.setVisibility(View.GONE);
                 btnReset.setVisibility(View.GONE);
@@ -225,15 +214,12 @@ public class TimerView extends LinearLayout {
                     btnStart.setVisibility(View.VISIBLE);
                     break;
                 case MSG_WHAT_TIME_TICK:
-
                     int hour = allTimerCount/60/60;
                     int min = (allTimerCount/60)%60;
                     int sec = allTimerCount%60;
-
-                    etHour.setText(hour+"");
-                    etMin.setText(min+"");
-                    etSec.setText(sec+"");
-
+                    etHour.setText(hour + "");
+                    etMin.setText(min + "");
+                    etSec.setText(sec + "");
                     break;
                 default:
                     break;

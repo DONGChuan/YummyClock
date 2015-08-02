@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.example.chuan.yummyclock.TimeView
+                <com.example.chuan.yummyclock.time.view.TimeView
                     android:id="@+id/tabTime"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -36,9 +36,9 @@
                         android:gravity="center"
                         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-                </com.example.chuan.yummyclock.TimeView>
+                </com.example.chuan.yummyclock.time.view.TimeView>
 
-                <com.example.chuan.yummyclock.AlarmView
+                <com.example.chuan.yummyclock.alarm.view.AlarmView
                     android:id="@+id/tabAlarm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -56,9 +56,9 @@
                         android:layout_height="wrap_content"
                         android:text="Add Alarm" />
 
-                </com.example.chuan.yummyclock.AlarmView>
+                </com.example.chuan.yummyclock.alarm.view.AlarmView>
 
-                <com.example.chuan.yummyclock.TimerView
+                <com.example.chuan.yummyclock.timer.view.TimerView
                     android:id="@+id/tabTimer"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -143,9 +143,9 @@
 
                     </LinearLayout>
 
-                </com.example.chuan.yummyclock.TimerView>
+                </com.example.chuan.yummyclock.timer.view.TimerView>
 
-                <com.example.chuan.yummyclock.StopWatchView
+                <com.example.chuan.yummyclock.stopwatch.view.StopWatchView
                     android:id="@+id/tabStopWatch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -252,7 +252,8 @@
 
                     </LinearLayout>
                     
-                </com.example.chuan.yummyclock.StopWatchView>
+                </com.example.chuan.yummyclock.stopwatch.view.StopWatchView>
+
             </FrameLayout>
         </LinearLayout>
     </TabHost>

@@ -1,4 +1,4 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.alarm.view;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -17,6 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TimePicker;
 
+import com.example.chuan.yummyclock.alarm.service.AlarmReceiver;
+import com.example.chuan.yummyclock.R;
+import com.example.chuan.yummyclock.alarm.model.AlarmData;
+
 import java.util.Calendar;
 
 /**
@@ -24,12 +28,14 @@ import java.util.Calendar;
  */
 public class AlarmView extends LinearLayout {
 
-    private Button btnAddAlarm;
-    private ListView lvAlarmList;
+    /*********** Variables ***********/
+    private Button btnAddAlarm; // Button to add an alarm
+    private ListView lvAlarmList; // ListView to show every alarm
     private ArrayAdapter<AlarmData> adapter;
     private static final String KEY_ALARM_LIST = "alarmList";
     private AlarmManager alarmManager;
 
+    /*********** Constructors ***********/
     public AlarmView(Context context) {
         super(context);
         init();
@@ -45,6 +51,7 @@ public class AlarmView extends LinearLayout {
         init();
     }
 
+    /*********** Functions ***********/
     private void init(){
         alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
     }
@@ -55,11 +62,10 @@ public class AlarmView extends LinearLayout {
 
         btnAddAlarm = (Button) findViewById(R.id.btn_add_alarm);
         lvAlarmList = (ListView) findViewById(R.id.lv_alarm);
-
         adapter = new ArrayAdapter<AlarmData>(getContext(), android.R.layout.simple_list_item_1);
         lvAlarmList.setAdapter(adapter);
 
-        readSavedAlarmList(); // ???????????
+        readSavedAlarmList();
 
         btnAddAlarm.setOnClickListener(new OnClickListener() {
             @Override
@@ -67,16 +73,15 @@ public class AlarmView extends LinearLayout {
                 addAlarm();
             }
         });
+        // Long click to pop-up a Dialog to delete an alarm
         lvAlarmList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
                 new AlertDialog.Builder(getContext())
                         .setTitle("Options")
                         .setItems(new CharSequence[]{"Delete"}, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
                                 switch (which) {
                                     case 0:
                                         deleteAlarm(position);
@@ -84,23 +89,20 @@ public class AlarmView extends LinearLayout {
                                     default:
                                         break;
                                 }
-
                             }
                         }).setNegativeButton("Cancel", null)
                         .show();
-
                 return true;
             }
         });
     }
 
     /**
-     * ??????
+     * Pop-up a time picker to select alarm
      */
     private void addAlarm() {
         Calendar c = Calendar.getInstance();
 
-        // ?? TimePicker
         new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
 
             @Override
@@ -113,27 +115,28 @@ public class AlarmView extends LinearLayout {
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
 
-                // ???????
                 Calendar currentTime = Calendar.getInstance();
-                // ?????????????, ?? 24 ??, ??????????
+                // If setting time is earlier than current time, day + 1
                 if (calendar.getTimeInMillis() <= currentTime.getTimeInMillis()) {
                     calendar.setTimeInMillis(calendar.getTimeInMillis()+24*60*60*1000);
                 }
 
                 AlarmData ad = new AlarmData(calendar.getTimeInMillis());
-                // ????????????
-                adapter.add(ad);
-                // ????????
+                adapter.add(ad); // Add in the list
+                // Setting alarm
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                         ad.getTime(),
                         5 * 60 * 1000,
                         PendingIntent.getBroadcast(getContext(), ad.getId(), new Intent(getContext(), AlarmReceiver.class), 0));
+                // Save alarm in sharedPreference
                 saveAlarmList();
-
             }
         }, c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true).show();
     }
 
+    /**
+     * Save alarm in sharedPreference
+     */
     private void saveAlarmList() {
         SharedPreferences.Editor editor = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE).edit();
 
@@ -143,10 +146,9 @@ public class AlarmView extends LinearLayout {
             sb.append(adapter.getItem(i).getTime()).append(",");
         }
 
-        if (sb.length()>1) {
+        if (sb.length() > 1) {
             String content = sb.toString().substring(0, sb.length()-1);
             editor.putString(KEY_ALARM_LIST, content);
-            System.out.println(content);
         }else{
             editor.putString(KEY_ALARM_LIST, null);
         }
@@ -154,11 +156,14 @@ public class AlarmView extends LinearLayout {
         editor.commit();
     }
 
+    /**
+     * Read alarms from sharedPreference
+     */
     private void readSavedAlarmList(){
         SharedPreferences sp = getContext().getSharedPreferences(AlarmView.class.getName(), Context.MODE_PRIVATE);
         String content = sp.getString(KEY_ALARM_LIST, null);
 
-        if (content!=null) {
+        if (content != null) {
             String[] timeStrings = content.split(",");
             for (String string : timeStrings) {
                 adapter.add(new AlarmData(Long.parseLong(string)));
@@ -180,45 +185,4 @@ public class AlarmView extends LinearLayout {
                 new Intent(getContext(), AlarmReceiver.class),
                 0));
     }
-
-    /**
-     * ???
-     */
-    private static class AlarmData{
-
-        private String timeLabel="";
-        private long time = 0;
-        private Calendar date;
-
-        public AlarmData(long time) {
-            this.time = time;
-
-            date = Calendar.getInstance();
-            date.setTimeInMillis(time);
-
-            timeLabel = String.format("%d?%d? %d:%d",
-                    date.get(Calendar.MONTH)+1,
-                    date.get(Calendar.DAY_OF_MONTH),
-                    date.get(Calendar.HOUR_OF_DAY),
-                    date.get(Calendar.MINUTE));
-        }
-
-        public long getTime() {
-            return time;
-        }
-
-        public String getTimeLabel() {
-            return timeLabel;
-        }
-
-        @Override
-        public String toString() {
-            return getTimeLabel();
-        }
-        // Using time as Id of each alarm. It is used to delete an existing alarm
-        public int getId(){
-            return (int)(getTime()/1000/60);
-        }
-    }
-
 }

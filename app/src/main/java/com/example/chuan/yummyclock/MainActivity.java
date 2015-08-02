@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import com.example.chuan.yummyclock.stopwatch.view.StopWatchView;
+
 public class MainActivity extends Activity {
 
     private TabHost tabHost;

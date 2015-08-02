@@ -1,23 +1,25 @@
-package com.example.chuan.yummyclock;
+package com.example.chuan.yummyclock.alarm.service;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+
+import com.example.chuan.yummyclock.R;
 
 /**
  * Created by Chuan on 7/21/2015.
  */
 public class PlayAlarmAty extends Activity {
 
-    private MediaPlayer mp;
+    private MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alarm_player_aty);
 
-        mp = MediaPlayer.create(this, R.raw.music);
-        mp.start();
+        mMediaPlayer = MediaPlayer.create(this, R.raw.music);
+        mMediaPlayer.start();
     }
 
     @Override
@@ -29,7 +31,7 @@ public class PlayAlarmAty extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mp.stop();
-        mp.release();
+        mMediaPlayer.stop();
+        mMediaPlayer.release();
     }
 }
